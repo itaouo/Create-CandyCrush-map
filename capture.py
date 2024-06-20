@@ -16,12 +16,10 @@ def captureImage(img_name):
         return None
     return img
 
-def drawTarget(image, target_img, target_position):
+def drawTarget(image, target_img, x, y):
     w = target_img.shape[1]
     h = target_img.shape[0]
-
-    for (x, y) in target_position:
-        cv.rectangle(image, (x, y), (x + w, y + h),(0, 255, 255), 5)
+    cv.rectangle(image, (x, y), (x + w, y + h),(0, 255, 255), 5)
     return image
 
 def displayImage(image):
@@ -81,10 +79,11 @@ def main():
             result_pos = checkLegalPosition(result_pos)
             result_pos = checkColor(result_pos, reference_img)
             for (x, y) in result_pos:
+                all_img = drawTarget(all_img, img, x, y)
                 all_data.append([y, x, j])
-            all_img = drawTarget(all_img, img, result_pos)
+        cv.imwrite("outputs/map_images/" + str(i) + ".png", all_img)
         writeData("outputs/data/" + str(i), all_data)
         # displayImage(rescaleImage(all_img))
-        cv.imwrite("outputs/map_image/" + str(i) + ".png", all_img)
+        
 
-# main()
+main()
